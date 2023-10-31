@@ -1,0 +1,14 @@
+{
+  "name": "rn-super-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start:host": "yarn --cwd HostApp start",
+    "start:app1": "yarn --cwd MiniApp1 start",
+    "run:host:ios": "yarn --cwd HostApp ios",
+    "run:host:android": "yarn --cwd HostApp android",
+    "run:app1:ios": "STANDALONE=1 yarn --cwd MiniApp1 ios",
+    "run:app1:android": "STANDALONE=1 yarn --cwd MiniApp1 android"
+  }
+}
