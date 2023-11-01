@@ -1,0 +1,5 @@
+{
+  "name": "IMAX_SUPPLIER",
+  "displayName": "IMAX_SUPPLIER",
+  "plugins": ["@notifee/react-native"]
+}

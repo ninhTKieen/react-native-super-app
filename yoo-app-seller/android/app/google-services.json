@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "638668861603",
+    "project_id": "imaxplatform-821dd",
+    "storage_bucket": "imaxplatform-821dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638668861603:android:ab18f925b76186ed388f16",
+        "android_client_info": {
+          "package_name": "com.imax.smartlife"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638668861603-80fd665aqeo3hrrhto7l007ppdsppdvd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBV6aCQqYO3jFFB78iA5bITDil5P_FkRk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638668861603-80fd665aqeo3hrrhto7l007ppdsppdvd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "638668861603-0nki8l946d2e8vdgl3esfj81lnmt4sft.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.imax.smartlife"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638668861603:android:4ea1210b31cfc853388f16",
+        "android_client_info": {
+          "package_name": "com.imaxtek.supplier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638668861603-80fd665aqeo3hrrhto7l007ppdsppdvd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBV6aCQqYO3jFFB78iA5bITDil5P_FkRk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638668861603-80fd665aqeo3hrrhto7l007ppdsppdvd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "638668861603-0nki8l946d2e8vdgl3esfj81lnmt4sft.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.imax.smartlife"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
