@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native webpack-start --port 9000",
-    "test": "jest"
+    "bundle": "react-native webpack-bundle",
+    "test": "jest",
+    "start:dev": "react-native start --reset-cache"
   },
   "dependencies": {
     "react": "18.2.0",

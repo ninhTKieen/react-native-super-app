@@ -25,6 +25,7 @@ function App(): JSX.Element {
             </React.Suspense>
           </View>
         );
+
       default:
         return (
           <SafeAreaView>

@@ -9,6 +9,8 @@
     "run:host:ios": "yarn --cwd HostApp ios",
     "run:host:android": "yarn --cwd HostApp android",
     "run:app1:ios": "STANDALONE=1 yarn --cwd MiniApp1 ios",
-    "run:app1:android": "STANDALONE=1 yarn --cwd MiniApp1 android"
+    "run:app1:android": "STANDALONE=1 yarn --cwd MiniApp1 android",
+    "pod:install": "cd HostApp/ios && pod install && cd ../../MiniApp1/ios && cd ../../",
+    "pod:deintegrate": "cd HostApp/ios && pod deintegrate && cd ../../MiniApp1/ios && cd ../../"
   }
 }
