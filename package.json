@@ -6,11 +6,14 @@
   "scripts": {
     "start:host": "yarn --cwd HostApp start",
     "start:app1": "yarn --cwd MiniApp1 start",
+    "start:iotapp": "yarn --cwd HomeIotApp start",
     "run:host:ios": "yarn --cwd HostApp ios",
     "run:host:android": "yarn --cwd HostApp android",
     "run:app1:ios": "STANDALONE=1 yarn --cwd MiniApp1 ios",
     "run:app1:android": "STANDALONE=1 yarn --cwd MiniApp1 android",
-    "pod:install": "cd HostApp/ios && pod install && cd ../../MiniApp1/ios && cd ../../",
-    "pod:deintegrate": "cd HostApp/ios && pod deintegrate && cd ../../MiniApp1/ios && cd ../../"
+    "run:iotapp:ios": "yarn --cwd HomeIotApp ios",
+    "run:iotapp:android": "yarn --cwd HomeIotApp android",
+    "pod:install": "cd HostApp/ios && pod install && cd ../../MiniApp1/ios && pod install && cd ../../HomeIotApp/ios && pod install && cd ../../",
+    "clean": "cd HostApp/ios && rm -rf Pods && rm Podfile.lock && cd ../../MiniApp1/ios && rm -rf Pods && rm Podfile.lock && cd ../../HomeIotApp/ios && rm -rf Pods && rm Podfile.lock && cd ../../"
   }
 }

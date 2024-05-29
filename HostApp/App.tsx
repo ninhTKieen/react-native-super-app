@@ -11,6 +11,9 @@ import {
 import {Federated} from '@callstack/repack/client';
 
 const App1 = React.lazy(() => Federated.importModule('MiniApp1', './MiniApp1'));
+const HomeIotApp = React.lazy(() =>
+  Federated.importModule('HomeIotApp', './HomeIotApp'),
+);
 
 function App(): JSX.Element {
   const [visibleApp, setVisibleApp] = useState<string>('');
@@ -20,8 +23,16 @@ function App(): JSX.Element {
       case 'app1':
         return (
           <View style={styles.miniAppWrapper}>
-            <React.Suspense fallback={<Text>Loading app1...</Text>}>
+            <React.Suspense fallback={<Text>Loading MiniApp1...</Text>}>
               <App1 />
+            </React.Suspense>
+          </View>
+        );
+      case 'homeIotApp':
+        return (
+          <View style={styles.miniAppWrapper}>
+            <React.Suspense fallback={<Text>Loading HomeIotApp...</Text>}>
+              <HomeIotApp />
             </React.Suspense>
           </View>
         );
@@ -32,6 +43,10 @@ function App(): JSX.Element {
             <StatusBar />
             <View style={styles.mainContainer}>
               <Button title="App One" onPress={() => setVisibleApp('app1')} />
+              <Button
+                title="Home Iot App"
+                onPress={() => setVisibleApp('homeIotApp')}
+              />
             </View>
           </SafeAreaView>
         );

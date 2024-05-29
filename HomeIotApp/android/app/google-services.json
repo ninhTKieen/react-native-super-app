@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "245883089968",
+    "project_id": "yootek-iot",
+    "storage_bucket": "yootek-iot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245883089968:android:74ed61fb688e42b25629f5",
+        "android_client_info": {
+          "package_name": "com.yootek.home"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhB2PUWoAK87Iz0d86Z4DtFv9YQDl4dfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
