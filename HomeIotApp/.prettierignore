@@ -1,0 +1,11 @@
+/node_modules
+/android
+/ios
+/.bundle
+/.cache
+/.idea
+/.vscode
+/.yarn
+/coverage
+/dist
+/vendor
