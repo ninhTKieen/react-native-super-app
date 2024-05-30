@@ -1,15 +1,16 @@
-import path from 'path';
+import {createRequire} from 'node:module';
+import path from 'node:path';
 import TerserPlugin from 'terser-webpack-plugin';
 import * as Repack from '@callstack/repack';
 
-const STANDALONE = Boolean(process.env.STANDALONE);
+const dirname = Repack.getDirname(import.meta.url);
 
 /**
  * More documentation, installation, usage, motivation and differences with Metro is available at:
  * https://github.com/callstack/repack/blob/main/README.md
  *
  * The API documentation for the functions and plugins used in this file is available at:
- * https://re-pack.netlify.app/
+ * https://re-pack.dev
  */
 
 /**
@@ -22,7 +23,7 @@ const STANDALONE = Boolean(process.env.STANDALONE);
 export default env => {
   const {
     mode = 'development',
-    context = Repack.getDirname(import.meta.url),
+    context = dirname,
     entry = './index.js',
     platform = process.env.PLATFORM,
     minimize = mode === 'production',
@@ -30,10 +31,8 @@ export default env => {
     bundleFilename = undefined,
     sourceMapFilename = undefined,
     assetsPath = undefined,
-    reactNativePath = new URL('./node_modules/react-native', import.meta.url)
-      .pathname,
+    reactNativePath = resolve('react-native'),
   } = env;
-  const dirname = Repack.getDirname(import.meta.url);
 
   if (!platform) {
     throw new Error('Missing platform');
@@ -150,18 +149,17 @@ export default env => {
        */
       rules: [
         {
-          test: /\.[jt]sx?$/,
+          test: /\.[cm]?[jt]sx?$/,
           include: [
-            /node_modules(.*[/\\])+react\//,
             /node_modules(.*[/\\])+react-native/,
             /node_modules(.*[/\\])+@react-native/,
             /node_modules(.*[/\\])+@react-navigation/,
             /node_modules(.*[/\\])+@react-native-community/,
-            /node_modules(.*[/\\])+@expo/,
+            /node_modules(.*[/\\])+expo/,
             /node_modules(.*[/\\])+pretty-format/,
             /node_modules(.*[/\\])+metro/,
             /node_modules(.*[/\\])+abort-controller/,
-            /node_modules(.*[/\\])+@callstack\/repack/,
+            /node_modules(.*[/\\])+@callstack[/\\]repack/,
           ],
           use: 'babel-loader',
         },
@@ -189,7 +187,7 @@ export default env => {
          * This loader handles all static assets (images, video, audio and others), so that you can
          * use (reference) them inside your application.
          *
-         * If you wan to handle specific asset type manually, filter out the extension
+         * If you want to handle specific asset type manually, filter out the extension
          * from `ASSET_EXTENSIONS`, for example:
          * ```
          * Repack.ASSET_EXTENSIONS.filter((ext) => ext !== 'svg')
@@ -243,12 +241,10 @@ export default env => {
         shared: {
           react: {
             ...Repack.Federated.SHARED_REACT,
-            eager: STANDALONE, // to be figured out
             requiredVersion: '18.0.2',
           },
           'react-native': {
             ...Repack.Federated.SHARED_REACT_NATIVE,
-            eager: STANDALONE, // to be figured out
             requiredVersion: '0.72.6',
           },
         },

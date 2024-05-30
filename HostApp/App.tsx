@@ -43,10 +43,10 @@ function App(): JSX.Element {
             <StatusBar />
             <View style={styles.mainContainer}>
               <Button title="App One" onPress={() => setVisibleApp('app1')} />
-              <Button
+              {/* <Button
                 title="Home Iot App"
                 onPress={() => setVisibleApp('homeIotApp')}
-              />
+              /> */}
             </View>
           </SafeAreaView>
         );
