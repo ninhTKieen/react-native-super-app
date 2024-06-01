@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* YooHomeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* YooHomeTests.m */; };
-		0C80B921A6F3F58F76C31292 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		0C80B921A6F3F58F76C31292 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		0D6E9136156D3BE4EDBA418C /* libPods-YooHome-YooHomeStage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AE0EC8C16BA6C39852E640D /* libPods-YooHome-YooHomeStage.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -27,8 +27,8 @@
 		9A7D4F3C2BF1C3DE00F1C25B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A7D4F3B2BF1C3DE00F1C25B /* GoogleService-Info.plist */; };
 		9A7D4F3D2BF1C3DE00F1C25B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A7D4F3B2BF1C3DE00F1C25B /* GoogleService-Info.plist */; };
 		9A7D4F3E2BF1C3DE00F1C25B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A7D4F3B2BF1C3DE00F1C25B /* GoogleService-Info.plist */; };
-		A2FED10214C0C87835C8414F /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		B75D08F03662CC8F22E10B33 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		A2FED10214C0C87835C8414F /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		B75D08F03662CC8F22E10B33 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		FB0EF7AEC140D666AE17BC4F /* libPods-YooHome-YooHomeDev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1447724F91A8692AD5127403 /* libPods-YooHome-YooHomeDev.a */; };
 /* End PBXBuildFile section */
 
@@ -93,9 +93,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* (null) in Frameworks */,
-				A2FED10214C0C87835C8414F /* (null) in Frameworks */,
-				B75D08F03662CC8F22E10B33 /* (null) in Frameworks */,
+				0C80B921A6F3F58F76C31292 /* BuildFile in Frameworks */,
+				A2FED10214C0C87835C8414F /* BuildFile in Frameworks */,
+				B75D08F03662CC8F22E10B33 /* BuildFile in Frameworks */,
 				30413DA52E14D61C2892F552 /* libPods-YooHome.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -403,7 +403,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+			shellScript = "set -e\n\nexport BUNDLE_COMMAND=webpack-bundle\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
 		09792921E520CF0351D1BA67 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

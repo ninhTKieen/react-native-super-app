@@ -7,9 +7,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 
-if (__DEV__) {
-  require('./ReactotronConfig');
-}
+// if (__DEV__) {
+//   require('./ReactotronConfig');
+// }
 
 const App = (): JSX.Element => {
   return (

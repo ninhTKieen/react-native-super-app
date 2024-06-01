@@ -1,13 +1,17 @@
-import path from 'path';
-import TerserPlugin from 'terser-webpack-plugin';
 import * as Repack from '@callstack/repack';
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import TerserPlugin from 'terser-webpack-plugin';
 
+const dirname = Repack.getDirname(import.meta.url);
+const { resolve } = createRequire(import.meta.url);
+const STANDALONE = Boolean(process.env.STANDALONE);
 /**
  * More documentation, installation, usage, motivation and differences with Metro is available at:
  * https://github.com/callstack/repack/blob/main/README.md
  *
  * The API documentation for the functions and plugins used in this file is available at:
- * https://re-pack.netlify.app/
+ * https://re-pack.dev
  */
 
 /**
@@ -17,10 +21,10 @@ import * as Repack from '@callstack/repack';
  * @param env Environment options passed from either Webpack CLI or React Native CLI
  *            when running with `react-native start/bundle`.
  */
-export default env => {
+export default (env) => {
   const {
     mode = 'development',
-    context = Repack.getDirname(import.meta.url),
+    context = dirname,
     entry = './index.js',
     platform = process.env.PLATFORM,
     minimize = mode === 'production',
@@ -28,10 +32,8 @@ export default env => {
     bundleFilename = undefined,
     sourceMapFilename = undefined,
     assetsPath = undefined,
-    reactNativePath = new URL('./node_modules/react-native', import.meta.url)
-      .pathname,
+    reactNativePath = resolve('react-native'),
   } = env;
-  const dirname = Repack.getDirname(import.meta.url);
 
   if (!platform) {
     throw new Error('Missing platform');
@@ -86,17 +88,14 @@ export default env => {
        * convention and some 3rd-party libraries that specify `react-native` field
        * in their `package.json` might not work correctly.
        */
+
       ...Repack.getResolveOptions(platform),
       conditionNames: ['default'],
-      alias: {},
       /**
        * Uncomment this to ensure all `react-native*` imports will resolve to the same React Native
        * dependency. You might need it when using workspaces/monorepos or unconventional project
        * structure. For simple/typical project you won't need it.
        */
-      // alias: {
-      //   'react-native': reactNativePath,
-      // },
     },
     /**
      * Configures output.
@@ -111,7 +110,7 @@ export default env => {
       path: path.join(dirname, 'build/generated', platform),
       filename: 'index.bundle',
       chunkFilename: '[name].chunk.bundle',
-      publicPath: Repack.getPublicPath({platform, devServer}),
+      publicPath: Repack.getPublicPath({ platform, devServer }),
     },
     /**
      * Configures optimization of the built bundle.
@@ -149,23 +148,35 @@ export default env => {
        */
       rules: [
         {
-          test: /\.[jt]sx?$/,
+          test: /\.[cm]?[jt]sx?$/,
           include: [
-            /node_modules(.*[/\\])+react\//,
             /node_modules(.*[/\\])+react-native/,
             /node_modules(.*[/\\])+@react-native/,
             /node_modules(.*[/\\])+@react-navigation/,
             /node_modules(.*[/\\])+@react-native-community/,
-            /node_modules(.*[/\\])+react-native-reanimated/,
-            /node_modules(.*[/\\])+react-native-web/,
+            /node_modules(.*[/\\])+react-freeze/,
+            /node_modules(.*[/\\])+@tanstack\/query-core/,
+            /node_modules(.*[/\\])+@tanstack\/react-query/,
+            /node_modules(.*[/\\])+@notifee\/react-native/,
+            /node_modules(.*[/\\])+@react-native-firebase\/app/,
+            /node_modules(.*[/\\])+@react-native-firebase\/messaging/,
+            /node_modules(.*[/\\])+nativewind/,
             /node_modules(.*[/\\])+engine.io-client/,
-            /node_modules(.*[/\\])+@babel\/runtime/,
+            /node_modules(.*[/\\])+socket.io-parser/,
             /node_modules(.*[/\\])+socket.io-client/,
-            /node_modules(.*[/\\])+@expo/,
+            /node_modules(.*[/\\])+@babel\/runtime/,
+            /node_modules(.*[/\\])+i18next/,
+            /node_modules(.*[/\\])+react-i18next/,
+            /node_modules(.*[/\\])+yup/,
+            /node_modules(.*[/\\])+@hookform\/resolvers/,
+            /node_modules(.*[/\\])+react-hook-form/,
+            /node_modules(.*[/\\])+cron-time-generator/,
+            /node_modules(.*[/\\])+zustand/,
+            /node_modules(.*[/\\])+expo/,
             /node_modules(.*[/\\])+pretty-format/,
             /node_modules(.*[/\\])+metro/,
             /node_modules(.*[/\\])+abort-controller/,
-            /node_modules(.*[/\\])+@callstack\/repack/,
+            /node_modules(.*[/\\])+@callstack[/\\]repack/,
           ],
           use: 'babel-loader',
         },
@@ -189,11 +200,29 @@ export default env => {
             },
           },
         },
+        {
+          test: /\.(js|jsx)$/,
+          include: [
+            /node_modules(.*[/\\])+react-native-reanimated/,
+            /node_modules(.*[/\\])+react-native-web/,
+          ],
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                [
+                  'module:metro-react-native-babel-preset',
+                  { disableImportExportTransform: true },
+                ],
+              ],
+            },
+          },
+        },
         /**
          * This loader handles all static assets (images, video, audio and others), so that you can
          * use (reference) them inside your application.
          *
-         * If you wan to handle specific asset type manually, filter out the extension
+         * If you want to handle specific asset type manually, filter out the extension
          * from `ASSET_EXTENSIONS`, for example:
          * ```
          * Repack.ASSET_EXTENSIONS.filter((ext) => ext !== 'svg')
@@ -240,18 +269,25 @@ export default env => {
       }),
 
       new Repack.plugins.ModuleFederationPlugin({
-        name: 'HostApp',
+        name: 'HomeIoT',
         exposes: {
-          './HostApp': './App.tsx',
+          './HomeIoT': './App.tsx',
         },
         shared: {
           react: {
             ...Repack.Federated.SHARED_REACT,
+            eager: STANDALONE, // to be figured out
             requiredVersion: '18.2.0',
           },
           'react-native': {
             ...Repack.Federated.SHARED_REACT_NATIVE,
+            eager: STANDALONE, // to be figured out
             requiredVersion: '0.72.6',
+          },
+          nativewind: {
+            singleton: true,
+            eager: STANDALONE,
+            requiredVersion: '2.0.11',
           },
           '@notifee/react-native': {
             singleton: true,
@@ -270,43 +306,41 @@ export default env => {
           },
           'react-native-gesture-handler': {
             singleton: true,
-            eager: true,
+            eager: false,
+            requiredVersion: '2.15.0',
           },
           'socket.io-client': {
             singleton: true,
-            eager: true,
+            eager: STANDALONE,
+            requiredVersion: '4.7.4',
           },
           '@babel/runtime': {
             singleton: true,
-            eager: true,
+            eager: false,
           },
           'react-native-permissions': {
             singleton: true,
-            eager: true,
+            eager: false,
           },
           'react-native-reanimated': {
             singleton: true,
-            eager: true,
-          },
-          'react-native-vision-camera': {
-            singleton: true,
-            eager: true,
+            eager: false,
           },
           'react-native-image-crop-picker': {
             singleton: true,
-            eager: true,
+            eager: false,
           },
           'react-native-safe-area-context': {
             singleton: true,
-            eager: true,
+            eager: false,
           },
           'react-native-linear-gradient': {
             singleton: true,
-            eager: true,
+            eager: false,
           },
           'react-native-screens': {
             singleton: true,
-            eager: true,
+            eager: false,
           },
         },
       }),

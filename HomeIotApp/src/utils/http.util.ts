@@ -1,83 +1,93 @@
 import authService from '@src/features/auth/auth.service';
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  Method,
-} from 'axios';
+import ky, { KyInstance } from 'ky';
 import Config from 'react-native-config';
 
 import { getAccessToken, getTenantId } from './token.util';
 
 interface IHttpRequest {
   url: string;
-  method: Method;
+  method:
+    | 'get'
+    | 'post'
+    | 'put'
+    | 'delete'
+    | 'patch'
+    | 'head'
+    | 'options'
+    | 'GET'
+    | 'POST'
+    | 'PUT'
+    | 'DELETE'
+    | 'PATCH'
+    | 'HEAD'
+    | 'OPTIONS'
+    | 'Get'
+    | 'Post'
+    | 'Put'
+    | 'Delete'
+    | 'Patch'
+    | 'Head'
+    | 'Options';
   data?: any;
   params?: any;
   contentType?: string;
 }
 
+console.log(Config.API_ENDPOINT);
+
 class HttpUtil {
-  private readonly http: AxiosInstance;
-  private readonly httpUploadImg: AxiosInstance;
+  private readonly http: KyInstance;
+  private readonly httpUploadImg: KyInstance;
 
   constructor() {
-    this.http = axios.create({
-      baseURL: Config.API_ENDPOINT,
+    this.http = ky.create({
+      prefixUrl: Config.API_ENDPOINT,
       timeout: 30000,
+
+      hooks: {
+        beforeRequest: [
+          (request) => {
+            const headers = request.headers;
+            const accessToken = getAccessToken();
+            const tenantId = getTenantId();
+
+            if (accessToken) {
+              headers.set('Authorization', `Bearer ${accessToken}`);
+            }
+
+            if (tenantId) {
+              headers.set('Abp.TenantId', tenantId);
+            }
+          },
+        ],
+        afterResponse: [
+          async (request, _options, response) => {
+            if (response.status === 401) {
+              const accessToken = getAccessToken();
+
+              if (accessToken) {
+                const success = await authService.refreshToken();
+
+                if (success) {
+                  return this.http(request);
+                } else {
+                  await authService.logout();
+                }
+              }
+            }
+          },
+        ],
+      },
     });
 
-    this.httpUploadImg = axios.create({
-      baseURL: Config.UPLOAD_IMAGE_ENDPOINT,
+    this.httpUploadImg = ky.create({
+      prefixUrl: Config.UPLOAD_IMAGE_ENDPOINT,
       timeout: 30000,
     });
+  }
 
-    this.http.interceptors.request.use(
-      (config) => {
-        const headers: any = config.headers;
-        const accessToken = getAccessToken();
-        const tenantId = getTenantId();
-
-        if (accessToken) {
-          headers.Authorization = `Bearer ${accessToken}`;
-        }
-        if (tenantId) {
-          headers['Abp.TenantId'] = tenantId;
-        }
-
-        return { ...config, headers: config.headers };
-      },
-      (error) => {
-        return Promise.reject(error);
-      },
-    );
-
-    this.http.interceptors.response.use(
-      (response: AxiosResponse) => {
-        return response;
-      },
-      async (error: AxiosError) => {
-        const accessToken = getAccessToken();
-
-        if (!accessToken) {
-          return Promise.reject(error);
-        }
-
-        if (error.response?.status === 401) {
-          const success = await authService.refreshToken();
-
-          if (success) {
-            return this.http(error.config as AxiosRequestConfig);
-          } else {
-            await authService.logout();
-            return Promise.reject(error);
-          }
-        }
-
-        return Promise.reject(error);
-      },
-    );
+  private sanitizeUrl(url: string): string {
+    return url.startsWith('/') ? url.slice(1) : url;
   }
 
   async request<T>({
@@ -87,19 +97,31 @@ class HttpUtil {
     method,
     contentType,
   }: IHttpRequest): Promise<T> {
-    const config: AxiosRequestConfig = {
-      url,
+    const options: Record<string, any> = {
       method,
-      params,
-      data,
+      searchParams: params,
+      json: data,
       headers: {
         'Content-Type': contentType || 'application/json',
       },
     };
 
-    const response = await this.http.request(config);
+    if (contentType === 'multipart/form-data') {
+      options.body = data;
+      delete options.json;
+      delete options.headers['Content-Type'];
+    }
 
-    return response.data as T;
+    url = this.sanitizeUrl(url);
+
+    let response;
+    try {
+      response = await this.http(url, { ...options, method }).json<T>();
+    } catch (error) {
+      throw error;
+    }
+
+    return response;
   }
 
   async uploadListImage({ files }: { files: any[] }): Promise<any> {
@@ -109,16 +131,13 @@ class HttpUtil {
       formData.append('file', file);
     });
 
-    const config: AxiosRequestConfig = {
-      url: '/api/files/upload-many',
-      method: 'POST',
-      data: formData,
-      baseURL: Config.API_ENDPOINT,
-    };
+    const response = await this.httpUploadImg
+      .post('api/files/upload-many', {
+        body: formData,
+      })
+      .json();
 
-    const response = await this.http.request(config);
-
-    return response.data;
+    return response;
   }
 
   async requestLogout<T>({
@@ -128,19 +147,23 @@ class HttpUtil {
     method,
     contentType,
   }: IHttpRequest): Promise<T> {
-    const config: AxiosRequestConfig = {
-      url,
+    const options: Record<string, any> = {
       method,
-      params,
-      data,
+      searchParams: params,
+      json: data,
       headers: {
         'Content-Type': contentType || 'application/json',
       },
     };
 
-    const response = await this.http.request(config);
+    if (contentType === 'multipart/form-data') {
+      options.body = data;
+      delete options.json;
+      delete options.headers['Content-Type'];
+    }
 
-    return response.data as T;
+    const response = await this.http(url, options).json<T>();
+    return response;
   }
 }
 

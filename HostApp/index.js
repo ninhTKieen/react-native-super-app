@@ -10,7 +10,7 @@ import {ScriptManager, Script, Federated} from '@callstack/repack/client';
 const resolveURL = Federated.createURLResolver({
   containers: {
     MiniApp1: 'http://localhost:9000/[name][ext]',
-    HomeIotApp: 'http://localhost:9001/[name][ext]',
+    HomeIoT: 'http://localhost:9001/[name][ext]',
   },
 });
 
